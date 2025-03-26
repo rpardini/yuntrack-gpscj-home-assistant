@@ -46,6 +46,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
         update_interval=SCAN_INTERVAL,
     )
 
+    # Store coordinator before forwarding setup
+    hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
+
     if entry.state == ConfigEntryState.SETUP_IN_PROGRESS:
         await coordinator.async_config_entry_first_refresh()
 
