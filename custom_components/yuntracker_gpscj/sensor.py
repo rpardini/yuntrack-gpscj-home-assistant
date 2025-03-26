@@ -1,22 +1,23 @@
+from datetime import datetime
+
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE, SIGNAL_STRENGTH_DECIBELS
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from datetime import datetime
 
 from .const import DOMAIN
 
 SENSOR_TYPES = {
     "battery": {"name": "Battery Level", "unit": PERCENTAGE, "device_class": SensorDeviceClass.BATTERY},
-    "gps_signal": {"name": "GPS Signal Level", "unit": SIGNAL_STRENGTH_DECIBELS,
+    "signal_gps": {"name": "GPS Signal Level", "unit": SIGNAL_STRENGTH_DECIBELS,
                    "device_class": SensorDeviceClass.SIGNAL_STRENGTH},
-    "lte_signal": {"name": "4G Signal Level", "unit": SIGNAL_STRENGTH_DECIBELS,
-                   "device_class": SensorDeviceClass.SIGNAL_STRENGTH},
-    "connection_time": {"name": "Connection Time", "device_class": SensorDeviceClass.TIMESTAMP},
-    "location_time": {"name": "Location Time", "device_class": SensorDeviceClass.TIMESTAMP},
-    "stoppage_time": {"name": "Stoppage Time", "device_class": SensorDeviceClass.TIMESTAMP},
-    "stop_minutes": {"name": "Stop Time (minutes)", "unit": "min"},
+    "signal_4g": {"name": "4G Signal Level", "unit": SIGNAL_STRENGTH_DECIBELS,
+                  "device_class": SensorDeviceClass.SIGNAL_STRENGTH},
+    "serverUtcDate": {"name": "Connection Time", "device_class": SensorDeviceClass.TIMESTAMP},
+    "deviceUtcDate": {"name": "Location Time", "device_class": SensorDeviceClass.TIMESTAMP},
+    "stopTime": {"name": "Stoppage Time", "device_class": SensorDeviceClass.TIMESTAMP},
+    "stopTimeMinute": {"name": "Stop Time (minutes)", "unit": "min"},
 }
 
 
@@ -57,4 +58,3 @@ class GPSCJSensor(CoordinatorEntity, SensorEntity):
         if self._attr_device_class == SensorDeviceClass.TIMESTAMP:
             return datetime.fromisoformat(value)
         return value
-
