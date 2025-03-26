@@ -4,6 +4,7 @@ from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE, SIGNAL_STRENGTH_DECIBELS, UnitOfSpeed
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
@@ -22,8 +23,8 @@ SENSOR_TYPES = {
     "speed": {"name": "Speed", "unit": UnitOfSpeed.KILOMETERS_PER_HOUR},
     "status": {"name": "Status"},
     "course": {"name": "Course"},
-    "latitude": {"name": "Location Latitude"},
-    "longitude": {"name": "Location Longitude"},
+    "latitude": {"name": "Latitude", "entity_category": EntityCategory.DIAGNOSTIC},
+    "longitude": {"name": "Longitude", "entity_category": EntityCategory.DIAGNOSTIC},
 }
 
 
@@ -56,6 +57,7 @@ class GPSCJSensor(CoordinatorEntity, SensorEntity):
         }
         self._attr_native_unit_of_measurement = sensor_info.get("unit")
         self._attr_device_class = sensor_info.get("device_class")
+        self._attr_entity_category = sensor_info.get("entity_category")
 
     @property
     def native_value(self):
