@@ -1,0 +1,45 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configurar Rastreador GPSCJ",
+        "description": "Por favor, insira os detalhes da sua conta GPSCJ.",
+        "data": {
+          "username": "Nome de Usuário",
+          "password": "Senha",
+          "user_id": "ID do Usuário",
+          "device_id": "ID do Dispositivo"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opções do Rastreador GPSCJ",
+        "description": "Atualize os detalhes da sua conta GPSCJ.",
+        "data": {
+          "username": "Nome de Usuário",
+          "password": "Senha",
+          "user_id": "ID do Usuário",
+          "device_id": "ID do Dispositivo"
+        }
+      }
+    }
+  },
+  "sensor": {
+    "battery": "Nível da Bateria",
+    "signal_gps": "Nível do Sinal GPS",
+    "signal_4g": "Nível do Sinal 4G",
+    "serverUtcDate": "Hora da Conexão",
+    "deviceUtcDate": "Hora da Localização",
+    "stopTime": "Hora da Parada",
+    "stopTimeMinute": "Tempo de Parada (minutos)",
+    "device_name_sn": "Nome/Número do Dispositivo",
+    "speed": "Velocidade",
+    "status": "Status",
+    "course": "Curso",
+    "latitude": "Latitude",
+    "longitude": "Longitude"
+  }
+}
