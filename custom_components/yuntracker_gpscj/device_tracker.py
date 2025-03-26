@@ -4,13 +4,16 @@ from datetime import timedelta
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
     UpdateFailed,
 )
 
 from .const import CONF_USER_ID, CONF_DEVICE_ID
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,13 +27,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
         """Fetch data from API."""
         try:
             from custom_components.yuntracker_gpscj.api import gpscj_login_and_get_device_position
-            return await hass.async_add_executor_job(
+            data = await hass.async_add_executor_job(
                 gpscj_login_and_get_device_position,
                 entry.data[CONF_USERNAME],
                 entry.data[CONF_PASSWORD],
                 entry.data[CONF_USER_ID],
                 entry.data[CONF_DEVICE_ID],
             )
+            return data  # This should include all fields, not just GPS
         except Exception as err:
             raise UpdateFailed(f"Error fetching data: {err}")
 
@@ -42,13 +46,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
         update_interval=SCAN_INTERVAL,
     )
 
-    # Only call this if the entry is in SETUP_IN_PROGRESS state
     if entry.state == ConfigEntryState.SETUP_IN_PROGRESS:
         await coordinator.async_config_entry_first_refresh()
-    else:
-        _LOGGER.warning("Skipping async_config_entry_first_refresh due to invalid entry state.")
 
-    async_add_entities([GPSCJTracker(coordinator, entry)])
+    device_tracker = GPSCJTracker(coordinator, entry)
+    async_add_entities([device_tracker])
+
+    # Forward to sensors
+    await hass.config_entries.async_forward_entry_setups(entry, [Platform.SENSOR])
 
 
 class GPSCJTracker(TrackerEntity):
@@ -69,6 +74,17 @@ class GPSCJTracker(TrackerEntity):
     def longitude(self):
         """Return longitude from API data."""
         return self.coordinator.data.get("longitude")
+
+    @property
+    def device_info(self):
+        """Return device info to group sensors under the same device."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self._entry.entry_id)},
+            name=f"GPSCJ Device {self._entry.data['device_id']}",
+            manufacturer="GPSCJ",
+            model="Tracker",
+            sw_version="1.0",
+        )
 
     async def async_update(self):
         """Manually trigger an update."""
