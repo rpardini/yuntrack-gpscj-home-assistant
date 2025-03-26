@@ -9,7 +9,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
-    UpdateFailed,
 )
 
 from .const import CONF_USER_ID, CONF_DEVICE_ID
@@ -22,28 +21,57 @@ SCAN_INTERVAL = timedelta(seconds=30)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
     """Set up GPSCJ tracker based on a config entry."""
+    session = None
 
     async def async_update_data():
         """Fetch data from API."""
-        try:
-            from custom_components.yuntracker_gpscj.api import gpscj_login_and_get_device_position
-            data = await hass.async_add_executor_job(
-                gpscj_login_and_get_device_position,
-                entry.data[CONF_USERNAME],
+        nonlocal session
+        from custom_components.yuntracker_gpscj.api import gpscj_create_session_and_login, \
+            gpscj_get_position_from_session
+
+        if session is None:
+            _LOGGER.info(f"Creating session for {entry.data[CONF_USERNAME]}")
+            session = await hass.async_add_executor_job(
+                gpscj_create_session_and_login,
                 entry.data[CONF_PASSWORD],
-                entry.data[CONF_USER_ID],
-                entry.data[CONF_DEVICE_ID],
+                entry.data[CONF_USERNAME]
             )
-            return data  # This should include all fields, not just GPS
+        else:
+            _LOGGER.info(f"Reusing session for {entry.data[CONF_USERNAME]}")
+
+        try:
+            _LOGGER.info(f"Fetching data for {entry.data[CONF_DEVICE_ID]}")
+            data = await hass.async_add_executor_job(
+                gpscj_get_position_from_session,
+                entry.data[CONF_DEVICE_ID],
+                entry.data[CONF_USER_ID],
+                session
+            )
+            _LOGGER.info(f"Got data for {entry.data[CONF_DEVICE_ID]}")
+            return data
         except Exception as err:
-            raise UpdateFailed(f"Error fetching data: {err}")
+            _LOGGER.error(f"Error fetching data: '{err}' - will try to re-login.")
+            session = await hass.async_add_executor_job(
+                gpscj_create_session_and_login,
+                entry.data[CONF_PASSWORD],
+                entry.data[CONF_USERNAME]
+            )
+            _LOGGER.info(f"Re-trying fetching data for {entry.data[CONF_DEVICE_ID]}")
+            data = await hass.async_add_executor_job(
+                gpscj_get_position_from_session,
+                entry.data[CONF_DEVICE_ID],
+                entry.data[CONF_USER_ID],
+                session
+            )
+            _LOGGER.info(f"Re-tried fetching data for {entry.data[CONF_DEVICE_ID]} sucessfully!")
+            return data
 
     coordinator = DataUpdateCoordinator(
         hass,
         _LOGGER,
         name="GPSCJ Tracker",
         update_method=async_update_data,
-        update_interval=SCAN_INTERVAL,
+        update_interval=SCAN_INTERVAL
     )
 
     # Store coordinator before forwarding setup

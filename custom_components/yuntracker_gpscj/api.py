@@ -23,6 +23,7 @@ def gpscj_login_and_get_device_position(p_username: str, p_password: str, p_user
     session.close()
     return device
 
+
 def gpscj_get_position_from_session(p_device_id, p_user_id, session):
     # Fetch positions
     headers = {
