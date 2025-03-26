@@ -35,7 +35,6 @@ def gpscj_get_position_from_session(p_device_id, p_user_id, session):
     response = session.post(POSITIONS_URL, data=payload, headers=headers)
     # Check we got a 2xx response.
     response.raise_for_status()
-    _LOGGER.debug(f"Response text: {response.text}")
     _LOGGER.info(f"GPSCJ - got location info for device {p_device_id}")
     # Response is JSON. Parse it.
     json_with_json = response.json()
@@ -71,7 +70,6 @@ def gpscj_get_position_from_session(p_device_id, p_user_id, session):
     datacontext = device['dataContext']
     # split by dashes
     datacontext_values = datacontext.split("-")
-    _LOGGER.debug(f"datacontext_values: {datacontext_values}")
     # pick at each by position
     device['battery'] = int(datacontext_values[4])
     device['signal_4g'] = int(datacontext_values[5])
@@ -112,14 +110,10 @@ def gpscj_create_session_and_login(p_password, p_username):
     login_form_response.raise_for_status()
     # Parse ASP.NET VIEWSTATE and crap from it using BeautifulSoup.
     login_form_response_tet = login_form_response.text
-    _LOGGER.debug(f"Login form response text: {login_form_response_tet}")
     soup = BeautifulSoup(login_form_response_tet, "html.parser")
     VIEWSTATE = soup.find("input", {"name": "__VIEWSTATE"})["value"]
     VIEWSTATEGENERATOR = soup.find("input", {"name": "__VIEWSTATEGENERATOR"})["value"]
     EVENTVALIDATION = soup.find("input", {"name": "__EVENTVALIDATION"})["value"]
-    _LOGGER.debug(f"ASP.NET crap: VIEWSTATE: {VIEWSTATE}")
-    _LOGGER.debug(f"ASP.NET crap: VIEWSTATEGENERATOR: {VIEWSTATEGENERATOR}")
-    _LOGGER.debug(f"ASP.NET crap: EVENTVALIDATION: {EVENTVALIDATION}")
     # Login payload
     payload = {
         "__VIEWSTATE": VIEWSTATE,
@@ -139,13 +133,14 @@ def gpscj_create_session_and_login(p_password, p_username):
     # Check we got a 2xx response.
     login_response.raise_for_status()
     login_response_text = login_response.text
-    _LOGGER.debug(f"Response text: {login_response_text}")
     # If we log in too frequently, response will contain 频繁登陆
     if "频繁登陆" in login_response_text:
+        _LOGGER.debug(f"Response text: {login_response_text}")
         raise Exception("Too many logins - ratelimited.")
     # If login worked, we should be redirected, via JS: 'parent.location.href='/Monitor.aspx'
     # Check the login_response_text for this string. If it's not there, login failed.
     if "parent.location.href='/Monitor.aspx" not in login_response_text:
+        _LOGGER.debug(f"Response text: {login_response_text}")
         _LOGGER.error("GPSCJ Login failed.")
         raise Exception("Login failed.")
     _LOGGER.info("GPSCJ Login successful.")
