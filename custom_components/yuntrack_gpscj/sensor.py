@@ -51,7 +51,7 @@ class GPSCJSensor(CoordinatorEntity, SensorEntity):
         self._attr_unique_id = f"{entry.entry_id}_{sensor_key}"
         self._attr_device_info = {
             "identifiers": {(DOMAIN, entry.entry_id)},
-            "name": f"YunTracker/GPSCJ {entry.data[CONF_DEVICE_ID]}",
+            "name": f"Yuntrack/GPSCJ {entry.data[CONF_DEVICE_ID]}",
             "manufacturer": "Some chinese manufacturer",
             "model": "Chinese stuff",
             "sw_version": "1.0",

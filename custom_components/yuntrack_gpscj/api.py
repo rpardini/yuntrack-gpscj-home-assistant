@@ -6,7 +6,7 @@ import json5
 import requests
 from bs4 import BeautifulSoup
 
-from custom_components.yuntracker_gpscj.const import REQUEST_TIMEOUT_SECONDS
+from custom_components.yuntrack_gpscj.const import REQUEST_TIMEOUT_SECONDS
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -26,7 +26,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     async def async_update_data():
         """Fetch data from API."""
         nonlocal session
-        from custom_components.yuntracker_gpscj.api import gpscj_create_session_and_login, \
+        from custom_components.yuntrack_gpscj.api import gpscj_create_session_and_login, \
             gpscj_get_position_from_session
 
         if session is None:
@@ -94,7 +94,7 @@ class GPSCJTracker(TrackerEntity):
         self.coordinator = coordinator
         self._entry = entry
         self._attr_unique_id = entry.entry_id
-        self._attr_name = f"YunTracker/GPSCJ {entry.data[CONF_USERNAME]}"
+        self._attr_name = f"Yuntrack/GPSCJ {entry.data[CONF_USERNAME]}"
 
     @property
     def latitude(self):
@@ -111,7 +111,7 @@ class GPSCJTracker(TrackerEntity):
         """Return device info to group sensors under the same device."""
         return DeviceInfo(
             identifiers={(DOMAIN, self._entry.entry_id)},
-            name=f"YunTracker/GPSCJ {self._entry.data[CONF_USERNAME]}",
+            name=f"Yuntrack/GPSCJ {self._entry.data[CONF_USERNAME]}",
             manufacturer="Some chinese manufacturer",
             model="Chinese stuff",
             sw_version="1.0",

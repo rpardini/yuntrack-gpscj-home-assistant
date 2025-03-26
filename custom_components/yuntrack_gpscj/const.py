@@ -1,4 +1,4 @@
-DOMAIN = "yuntracker_gpscj"
+DOMAIN = "yuntrack_gpscj"
 PLATFORMS = ["device_tracker"]
 CONF_USERNAME = "username"
 CONF_PASSWORD = "password"

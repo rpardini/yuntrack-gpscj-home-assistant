@@ -4,7 +4,7 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
 
-DOMAIN = "yuntracker_gpscj"
+DOMAIN = "yuntrack_gpscj"
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
