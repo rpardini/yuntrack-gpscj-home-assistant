@@ -6,6 +6,8 @@ import json5
 import requests
 from bs4 import BeautifulSoup
 
+from custom_components.yuntracker_gpscj.const import REQUEST_TIMEOUT_SECONDS
+
 _LOGGER = logging.getLogger(__name__)
 
 # Some consts
@@ -32,7 +34,7 @@ def gpscj_get_position_from_session(p_device_id, p_user_id, session):
         "Content-Type": "application/json"
     }
     payload = json.dumps({"UserID": p_user_id, "isFirst": True, "TimeZones": TIMEZONES, "DeviceID": p_device_id})
-    response = session.post(POSITIONS_URL, data=payload, headers=headers, timeout=5)
+    response = session.post(POSITIONS_URL, data=payload, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
     # Check we got a 2xx response.
     response.raise_for_status()
     _LOGGER.info(f"GPSCJ - got location info for device {p_device_id}")
@@ -104,7 +106,8 @@ def gpscj_create_session_and_login(p_password, p_username):
     # Set the Session's user agent to the one we want.
     session.headers.update({"User-Agent": USER_AGENT})
     # Hit the login form. This inits the ASP.NET cookie and the VIEWSTATE, server-side.
-    login_form_response = session.get(LOGIN_FORM_URL, headers={"Referer": MAIN_FRAME_URL}, timeout=5)
+    login_form_response = session.get(LOGIN_FORM_URL, headers={"Referer": MAIN_FRAME_URL},
+                                      timeout=REQUEST_TIMEOUT_SECONDS)
     _LOGGER.info(f"Login form status code: {login_form_response.status_code}")
     # Check we got a 2xx response.
     login_form_response.raise_for_status()
@@ -128,7 +131,8 @@ def gpscj_create_session_and_login(p_password, p_username):
     }
     # Login request
     login_response = session.post(LOGIN_URL, data=payload,
-                                  headers={"Content-Type": "application/x-www-form-urlencoded"}, timeout=5)
+                                  headers={"Content-Type": "application/x-www-form-urlencoded"},
+                                  timeout=REQUEST_TIMEOUT_SECONDS)
     _LOGGER.info(f"Login status code: {login_response.status_code}")
     # Check we got a 2xx response.
     login_response.raise_for_status()
