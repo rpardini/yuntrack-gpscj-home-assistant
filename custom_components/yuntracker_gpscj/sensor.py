@@ -46,7 +46,8 @@ class GPSCJSensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self._entry = entry
         self._sensor_key = sensor_key
-        self._attr_name = f"{entry.data[CONF_DEVICE_ID]} {sensor_info['name']}"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = sensor_key
         self._attr_unique_id = f"{entry.entry_id}_{sensor_key}"
         self._attr_device_info = {
             "identifiers": {(DOMAIN, entry.entry_id)},
@@ -58,7 +59,6 @@ class GPSCJSensor(CoordinatorEntity, SensorEntity):
         self._attr_native_unit_of_measurement = sensor_info.get("unit")
         self._attr_device_class = sensor_info.get("device_class")
         self._attr_entity_category = sensor_info.get("entity_category")
-        self._attr_translation_key = sensor_key  # Updated translation_key
 
     @property
     def native_value(self):

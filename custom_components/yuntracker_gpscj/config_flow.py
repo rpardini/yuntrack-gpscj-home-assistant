@@ -13,7 +13,7 @@ class GPSCJConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            return self.async_create_entry(title=user_input[CONF_DEVICE_ID], data=user_input)
+            return self.async_create_entry(title=user_input[CONF_USERNAME], data=user_input)
 
         data_schema = vol.Schema({
             vol.Required(CONF_USERNAME): str,
