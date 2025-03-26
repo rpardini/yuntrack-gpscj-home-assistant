@@ -1,8 +1,5 @@
 {
   "name": "Yuntrack/GPSCJ",
-  "filename": "yuntrack_gpscj.zip",
-  "hide_default_branch": true,
   "homeassistant": "2025.3.0",
-  "render_readme": true,
-  "zip_release": true
+  "render_readme": true
 }
