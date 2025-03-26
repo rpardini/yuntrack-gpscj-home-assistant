@@ -1,0 +1,9 @@
+# artifacts
+__pycache__
+.pytest*
+*.egg-info
+*/build/*
+*/dist/*
+.idea
+.vscode
+*.iml

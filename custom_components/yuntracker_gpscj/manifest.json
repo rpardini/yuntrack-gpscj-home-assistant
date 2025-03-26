@@ -1,0 +1,15 @@
+{
+  "domain": "yuntracker_gpscj",
+  "name": "YunTracker/GPSCJ Tracker",
+  "version": "0.0.1",
+  "config_flow": true,
+  "documentation": "https://github.com/rpardini/yuntracker-gpscj-home-assistant",
+  "codeowners": [
+    "@rpardini"
+  ],
+  "requirements": [
+    "requests==2.32.3",
+    "beautifulsoup4==4.13.3",
+    "json5==0.10.0"
+  ]
+}
