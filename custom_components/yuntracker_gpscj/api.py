@@ -1,13 +1,14 @@
 import datetime
 import json
+import logging
 
 import json5
 import requests
 from bs4 import BeautifulSoup
 
+_LOGGER = logging.getLogger(__name__)
+
 # Some consts
-LOG_DEBUG = False
-LOG_PROGRESS = False
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:136.0) Gecko/20100101 Firefox/136.0"
 MAIN_FRAME_URL = "https://www.gpscj.net/?hmm=3"
 LOGIN_FORM_URL = "https://www.gpscj.net/logincj.aspx?language=en-us"
@@ -34,8 +35,8 @@ def gpscj_get_position_from_session(p_device_id, p_user_id, session):
     response = session.post(POSITIONS_URL, data=payload, headers=headers)
     # Check we got a 2xx response.
     response.raise_for_status()
-    if LOG_DEBUG:
-        print(f"Response text: {response.text}")
+    _LOGGER.debug(f"Response text: {response.text}")
+    _LOGGER.info(f"GPSCJ - got location info for device {p_device_id}")
     # Response is JSON. Parse it.
     json_with_json = response.json()
     # print(f"json_with_json: {json_with_json}")
@@ -70,8 +71,7 @@ def gpscj_get_position_from_session(p_device_id, p_user_id, session):
     datacontext = device['dataContext']
     # split by dashes
     datacontext_values = datacontext.split("-")
-    if LOG_DEBUG:
-        print(f"datacontext_values: {datacontext_values}")
+    _LOGGER.debug(f"datacontext_values: {datacontext_values}")
     # pick at each by position
     device['battery'] = int(datacontext_values[4])
     device['signal_4g'] = int(datacontext_values[5])
@@ -107,22 +107,19 @@ def gpscj_create_session_and_login(p_password, p_username):
     session.headers.update({"User-Agent": USER_AGENT})
     # Hit the login form. This inits the ASP.NET cookie and the VIEWSTATE, server-side.
     login_form_response = session.get(LOGIN_FORM_URL, headers={"Referer": MAIN_FRAME_URL})
-    if LOG_PROGRESS:
-        print(f"Login form status code: {login_form_response.status_code}")
+    _LOGGER.info(f"Login form status code: {login_form_response.status_code}")
     # Check we got a 2xx response.
     login_form_response.raise_for_status()
     # Parse ASP.NET VIEWSTATE and crap from it using BeautifulSoup.
     login_form_response_tet = login_form_response.text
-    if LOG_DEBUG:
-        print(f"Login form response text: {login_form_response_tet}")
+    _LOGGER.debug(f"Login form response text: {login_form_response_tet}")
     soup = BeautifulSoup(login_form_response_tet, "html.parser")
     VIEWSTATE = soup.find("input", {"name": "__VIEWSTATE"})["value"]
     VIEWSTATEGENERATOR = soup.find("input", {"name": "__VIEWSTATEGENERATOR"})["value"]
     EVENTVALIDATION = soup.find("input", {"name": "__EVENTVALIDATION"})["value"]
-    if LOG_DEBUG:
-        print(f"ASP.NET crap: VIEWSTATE: {VIEWSTATE}")
-        print(f"ASP.NET crap: VIEWSTATEGENERATOR: {VIEWSTATEGENERATOR}")
-        print(f"ASP.NET crap: EVENTVALIDATION: {EVENTVALIDATION}")
+    _LOGGER.debug(f"ASP.NET crap: VIEWSTATE: {VIEWSTATE}")
+    _LOGGER.debug(f"ASP.NET crap: VIEWSTATEGENERATOR: {VIEWSTATEGENERATOR}")
+    _LOGGER.debug(f"ASP.NET crap: EVENTVALIDATION: {EVENTVALIDATION}")
     # Login payload
     payload = {
         "__VIEWSTATE": VIEWSTATE,
@@ -138,22 +135,18 @@ def gpscj_create_session_and_login(p_password, p_username):
     # Login request
     login_response = session.post(LOGIN_URL, data=payload,
                                   headers={"Content-Type": "application/x-www-form-urlencoded"})
-    if LOG_PROGRESS:
-        print(f"Login status code: {login_response.status_code}")
+    _LOGGER.info(f"Login status code: {login_response.status_code}")
     # Check we got a 2xx response.
     login_response.raise_for_status()
-    # Print out the whole thing. Are we correcly logging in or not?
     login_response_text = login_response.text
-    if LOG_DEBUG:
-        print(f"Response text: {login_response_text}")
+    _LOGGER.debug(f"Response text: {login_response_text}")
     # If we log in too frequently, response will contain 频繁登陆
     if "频繁登陆" in login_response_text:
         raise Exception("Too many logins - ratelimited.")
     # If login worked, we should be redirected, via JS: 'parent.location.href='/Monitor.aspx'
     # Check the login_response_text for this string. If it's not there, login failed.
     if "parent.location.href='/Monitor.aspx" not in login_response_text:
-        print("Login failed.")
+        _LOGGER.error("GPSCJ Login failed.")
         raise Exception("Login failed.")
-    if LOG_PROGRESS:
-        print("Login successful.")
+    _LOGGER.info("GPSCJ Login successful.")
     return session
