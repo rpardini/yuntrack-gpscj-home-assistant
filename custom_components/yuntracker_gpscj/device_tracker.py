@@ -2,11 +2,15 @@ import logging
 from datetime import timedelta
 
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigEntryState
+from homeassistant.const import CONF_USERNAME, CONF_PASSWORD
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.update_coordinator import (
+    DataUpdateCoordinator,
+    UpdateFailed,
+)
 
-from .const import CONF_USERNAME, CONF_PASSWORD, CONF_USER_ID, CONF_DEVICE_ID
+from .const import CONF_USER_ID, CONF_DEVICE_ID
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -38,7 +42,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
         update_interval=SCAN_INTERVAL,
     )
 
-    await coordinator.async_config_entry_first_refresh()
+    # Only call this if the entry is in SETUP_IN_PROGRESS state
+    if entry.state == ConfigEntryState.SETUP_IN_PROGRESS:
+        await coordinator.async_config_entry_first_refresh()
+    else:
+        _LOGGER.warning("Skipping async_config_entry_first_refresh due to invalid entry state.")
 
     async_add_entities([GPSCJTracker(coordinator, entry)])
 
