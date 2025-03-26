@@ -2,7 +2,7 @@ from datetime import datetime
 
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, SIGNAL_STRENGTH_DECIBELS
+from homeassistant.const import PERCENTAGE, SIGNAL_STRENGTH_DECIBELS, UnitOfSpeed
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -18,6 +18,12 @@ SENSOR_TYPES = {
     "deviceUtcDate": {"name": "Location Time", "device_class": SensorDeviceClass.TIMESTAMP},
     "stopTime": {"name": "Stoppage Time", "device_class": SensorDeviceClass.TIMESTAMP},
     "stopTimeMinute": {"name": "Stop Time (minutes)", "unit": "min"},
+    "device_name_sn": {"name": "Device Name/#"},
+    "speed": {"name": "Speed", "unit": UnitOfSpeed.KILOMETERS_PER_HOUR},
+    "status": {"name": "Status"},
+    "course": {"name": "Course"},
+    "latitude": {"name": "Location Latitude"},
+    "longitude": {"name": "Location Longitude"},
 }
 
 
@@ -55,6 +61,10 @@ class GPSCJSensor(CoordinatorEntity, SensorEntity):
     def native_value(self):
         """Return the sensor value."""
         value = self.coordinator.data.get(self._sensor_key)
+        if self._sensor_key == "device_name_sn":
+            return f"{self.coordinator.data.get('modelName')} {self.coordinator.data.get('model')} {self.coordinator.data.get('sn')}"
+        if self._sensor_key == "speed":
+            return float(value)
         if self._attr_device_class == SensorDeviceClass.TIMESTAMP:
             return datetime.fromisoformat(value)
         return value
