@@ -5,10 +5,10 @@
         "title": "Configurar Rastreador GPSCJ",
         "description": "Por favor, insira os detalhes da sua conta GPSCJ.",
         "data": {
-          "username": "Nome de Usuário",
-          "password": "Senha",
-          "user_id": "ID do Usuário",
-          "device_id": "ID do Dispositivo"
+          "username": "Nome de Usuário (IMEI/Número de ID, geralmente da etiqueta no dispositivo)",
+          "password": "Senha (originalmente 123456 mas você alterou no site gpscj.net)",
+          "user_id": "ID do Usuário (capture isso usando as ferramentas de desenvolvedor do seu navegador)",
+          "device_id": "ID do Dispositivo (capture isso usando as ferramentas de desenvolvedor do seu navegador)"
         }
       }
     }
@@ -19,10 +19,10 @@
         "title": "Opções do Rastreador GPSCJ",
         "description": "Atualize os detalhes da sua conta GPSCJ.",
         "data": {
-          "username": "Nome de Usuário",
-          "password": "Senha",
-          "user_id": "ID do Usuário",
-          "device_id": "ID do Dispositivo"
+          "username": "Nome de Usuário (IMEI/Número de ID, geralmente da etiqueta no dispositivo)",
+          "password": "Senha (originalmente 123456 mas você alterou no site gpscj.net)",
+          "user_id": "ID do Usuário (capture isso usando as ferramentas de desenvolvedor do seu navegador)",
+          "device_id": "ID do Dispositivo (capture isso usando as ferramentas de desenvolvedor do seu navegador)"
         }
       }
     }
@@ -60,7 +60,7 @@
         "name": "Status"
       },
       "course": {
-        "name": "Curso"
+        "name": "Direção"
       },
       "latitude": {
         "name": "Latitude"

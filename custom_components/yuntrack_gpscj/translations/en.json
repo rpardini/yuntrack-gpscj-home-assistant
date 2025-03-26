@@ -5,10 +5,10 @@
         "title": "Configure GPSCJ Tracker",
         "description": "Please enter your GPSCJ account details.",
         "data": {
-          "username": "Username",
-          "password": "Password",
-          "user_id": "User ID",
-          "device_id": "Device ID"
+          "username": "Username (IMEI/ID number, usually on a label on the device)",
+          "password": "Password (originally 123456 but you changed it on the gpscj.net website)",
+          "user_id": "User ID (capture this using your browser's developer tools)",
+          "device_id": "Device ID (capture this using your browser's developer tools)"
         }
       }
     }
@@ -19,10 +19,10 @@
         "title": "GPSCJ Tracker Options",
         "description": "Update your GPSCJ account details.",
         "data": {
-          "username": "Username",
-          "password": "Password",
-          "user_id": "User ID",
-          "device_id": "Device ID"
+          "username": "Username (IMED/ID number, usually on a label on the device)",
+          "password": "Password (originally 123456 but you changed it on the gpscj.net website)",
+          "user_id": "User ID (capture this using your browser's developer tools)",
+          "device_id": "Device ID (capture this using your browser's developer tools)"
         }
       }
     }
