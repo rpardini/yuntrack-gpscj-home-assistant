@@ -47,6 +47,12 @@
       "stop_time": {
         "name": "Stoppage Time"
       },
+      "last_cloud_update": {
+        "name": "Cloud Update"
+      },
+      "session_created": {
+        "name": "Last Login"
+      },
       "stop_time_minute": {
         "name": "Stop Time (minutes)"
       },

@@ -81,6 +81,8 @@ def gpscj_get_position_from_session(p_device_id, p_user_id, session):
     # 'deviceUtcDate': '2025-03-24 20:56:12'
     device['serverUtcDate'] = datetime.datetime.strptime(device['serverUtcDate'], "%Y-%m-%d %H:%M:%S")
     device['deviceUtcDate'] = datetime.datetime.strptime(device['deviceUtcDate'], "%Y-%m-%d %H:%M:%S")
+    # last-update-time: current time in UTC
+    device['last_cloud_update'] = datetime.datetime.now(datetime.UTC).replace(microsecond=0).isoformat()
     # ensure stopTimeMinute is an int
     device['stopTimeMinute'] = int(device['stopTimeMinute'])
     # calculate the date since which the device is stopped; take current datetime UTC, subtract the stopTimeMinute(s)

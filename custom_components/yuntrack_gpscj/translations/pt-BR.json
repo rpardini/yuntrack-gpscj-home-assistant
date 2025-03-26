@@ -47,6 +47,12 @@
       "stop_time": {
         "name": "Hora da Parada"
       },
+      "last_cloud_update": {
+        "name": "Última Atualização"
+      },
+      "session_created": {
+        "name": "Último Login"
+      },
       "stop_time_minute": {
         "name": "Tempo de Parada (minutos)"
       },

@@ -17,6 +17,8 @@ SENSOR_TYPES = {
                   "device_class": SensorDeviceClass.SIGNAL_STRENGTH},
     "server_utc_date": {"name": "Connection Time", "device_class": SensorDeviceClass.TIMESTAMP},
     "device_utc_date": {"name": "Location Time", "device_class": SensorDeviceClass.TIMESTAMP},
+    "last_cloud_update": {"name": "Cloud Update time", "device_class": SensorDeviceClass.TIMESTAMP},
+    "session_created": {"name": "Login time", "device_class": SensorDeviceClass.TIMESTAMP},
     "stop_time": {"name": "Stoppage Time", "device_class": SensorDeviceClass.TIMESTAMP},
     "stop_time_minute": {"name": "Stop Time (minutes)", "unit": "min"},
     "device_name_sn": {"name": "Device Name/#"},

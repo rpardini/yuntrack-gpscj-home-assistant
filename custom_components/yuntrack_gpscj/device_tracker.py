@@ -1,5 +1,5 @@
+import datetime
 import logging
-from datetime import timedelta, datetime
 
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
@@ -16,26 +16,29 @@ from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-SCAN_INTERVAL = timedelta(seconds=30)
+SCAN_INTERVAL = datetime.timedelta(seconds=30)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
     """Set up GPSCJ tracker based on a config entry."""
     session = None
+    session_created = None
 
     async def async_update_data():
         """Fetch data from API."""
         nonlocal session
+        nonlocal session_created
         from custom_components.yuntrack_gpscj.api import gpscj_create_session_and_login, \
             gpscj_get_position_from_session
 
-        if session is None:
+        if session is None or session_created is None:
             _LOGGER.info(f"Creating session for {entry.data[CONF_USERNAME]}")
             session = await hass.async_add_executor_job(
                 gpscj_create_session_and_login,
                 entry.data[CONF_PASSWORD],
                 entry.data[CONF_USERNAME]
             )
+            session_created = datetime.datetime.now(datetime.UTC)
         else:
             _LOGGER.info(f"Reusing session for {entry.data[CONF_USERNAME]}")
 
@@ -48,6 +51,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
                 session
             )
             _LOGGER.info(f"Got data for {entry.data[CONF_DEVICE_ID]}")
+            data["session_created"] = session_created.replace(microsecond=0).isoformat()
             return data
         except Exception as err:
             _LOGGER.error(f"Error fetching data: '{err}' - will try to re-login.")
@@ -56,6 +60,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
                 entry.data[CONF_PASSWORD],
                 entry.data[CONF_USERNAME]
             )
+            session_created = datetime.datetime.now(datetime.UTC)
             _LOGGER.info(f"Re-trying fetching data for {entry.data[CONF_DEVICE_ID]}")
             data = await hass.async_add_executor_job(
                 gpscj_get_position_from_session,
@@ -63,7 +68,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
                 entry.data[CONF_USER_ID],
                 session
             )
-            _LOGGER.info(f"Re-tried fetching data for {entry.data[CONF_DEVICE_ID]} sucessfully!")
+            _LOGGER.info(f"Re-tried fetching data for {entry.data[CONF_DEVICE_ID]} successfully!")
+            data["session_created"] = session_created.replace(microsecond=0).isoformat()
             return data
 
     coordinator = DataUpdateCoordinator(
@@ -120,17 +126,17 @@ class GPSCJTracker(TrackerEntity):
     @property
     def connection_time(self):
         """Return connection time as a datetime object."""
-        return datetime.fromisoformat(self.coordinator.data.get("server_utc_date"))
+        return datetime.datetime.fromisoformat(self.coordinator.data.get("server_utc_date"))
 
     @property
     def location_time(self):
         """Return location time as a datetime object."""
-        return datetime.fromisoformat(self.coordinator.data.get("device_utc_date"))
+        return datetime.datetime.fromisoformat(self.coordinator.data.get("device_utc_date"))
 
     @property
     def stoppage_time(self):
         """Return stoppage time as a datetime object."""
-        return datetime.fromisoformat(self.coordinator.data.get("stop_time"))
+        return datetime.datetime.fromisoformat(self.coordinator.data.get("stop_time"))
 
     async def async_update(self):
         """Manually trigger an update."""
