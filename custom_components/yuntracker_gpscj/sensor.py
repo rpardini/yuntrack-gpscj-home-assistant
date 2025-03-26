@@ -3,6 +3,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE, SIGNAL_STRENGTH_DECIBELS
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from datetime import datetime
 
 from .const import DOMAIN
 
@@ -52,4 +53,8 @@ class GPSCJSensor(CoordinatorEntity, SensorEntity):
     @property
     def native_value(self):
         """Return the sensor value."""
-        return self.coordinator.data.get(self._sensor_key)
+        value = self.coordinator.data.get(self._sensor_key)
+        if self._attr_device_class == SensorDeviceClass.TIMESTAMP:
+            return datetime.fromisoformat(value)
+        return value
+

@@ -1,5 +1,5 @@
 import logging
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
@@ -88,6 +88,21 @@ class GPSCJTracker(TrackerEntity):
             model="Tracker",
             sw_version="1.0",
         )
+
+    @property
+    def connection_time(self):
+        """Return connection time as a datetime object."""
+        return datetime.fromisoformat(self.coordinator.data.get("connection_time"))
+
+    @property
+    def location_time(self):
+        """Return location time as a datetime object."""
+        return datetime.fromisoformat(self.coordinator.data.get("location_time"))
+
+    @property
+    def stoppage_time(self):
+        """Return stoppage time as a datetime object."""
+        return datetime.fromisoformat(self.coordinator.data.get("stoppage_time"))
 
     async def async_update(self):
         """Manually trigger an update."""
