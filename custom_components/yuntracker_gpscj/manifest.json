@@ -13,12 +13,7 @@
     "beautifulsoup4==4.13.3",
     "json5==0.10.0"
   ],
-  "translations": [
-    "translations/en.json",
-    "translations/pt-BR.json"
-  ],
   "iot_class": "cloud_polling",
   "integration_type": "device",
-  "quality_scale": "silver",
-  "is_built_in": false
+  "quality_scale": "silver"
 }

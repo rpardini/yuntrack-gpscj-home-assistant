@@ -29,19 +29,45 @@
   },
   "entity": {
     "sensor": {
-      "battery": { "name": "Nível da Bateria" },
-      "signal_gps": { "name": "Nível do Sinal GPS" },
-      "signal_4g": { "name": "Nível do Sinal 4G" },
-      "serverUtcDate": { "name": "Hora da Conexão" },
-      "deviceUtcDate": { "name": "Hora da Localização" },
-      "stopTime": { "name": "Hora da Parada" },
-      "stopTimeMinute": { "name": "Tempo de Parada (minutos)" },
-      "device_name_sn": { "name": "Nome/Número do Dispositivo" },
-      "speed": { "name": "Velocidade" },
-      "status": { "name": "Status" },
-      "course": { "name": "Curso" },
-      "latitude": { "name": "Latitude" },
-      "longitude": { "name": "Longitude" }
+      "battery": {
+        "name": "Nível da Bateria"
+      },
+      "signal_gps": {
+        "name": "Nível do Sinal GPS"
+      },
+      "signal_4g": {
+        "name": "Nível do Sinal 4G"
+      },
+      "server_utc_date": {
+        "name": "Hora da Conexão"
+      },
+      "device_utc_date": {
+        "name": "Hora da Localização"
+      },
+      "stop_time": {
+        "name": "Hora da Parada"
+      },
+      "stop_time_minute": {
+        "name": "Tempo de Parada (minutos)"
+      },
+      "device_name_sn": {
+        "name": "Nome/Número do Dispositivo"
+      },
+      "speed": {
+        "name": "Velocidade"
+      },
+      "status": {
+        "name": "Status"
+      },
+      "course": {
+        "name": "Curso"
+      },
+      "latitude": {
+        "name": "Latitude"
+      },
+      "longitude": {
+        "name": "Longitude"
+      }
     }
   }
 }

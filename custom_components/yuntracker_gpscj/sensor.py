@@ -15,10 +15,10 @@ SENSOR_TYPES = {
                    "device_class": SensorDeviceClass.SIGNAL_STRENGTH},
     "signal_4g": {"name": "4G Signal Level", "unit": SIGNAL_STRENGTH_DECIBELS,
                   "device_class": SensorDeviceClass.SIGNAL_STRENGTH},
-    "serverUtcDate": {"name": "Connection Time", "device_class": SensorDeviceClass.TIMESTAMP},
-    "deviceUtcDate": {"name": "Location Time", "device_class": SensorDeviceClass.TIMESTAMP},
-    "stopTime": {"name": "Stoppage Time", "device_class": SensorDeviceClass.TIMESTAMP},
-    "stopTimeMinute": {"name": "Stop Time (minutes)", "unit": "min"},
+    "server_utc_date": {"name": "Connection Time", "device_class": SensorDeviceClass.TIMESTAMP},
+    "device_utc_date": {"name": "Location Time", "device_class": SensorDeviceClass.TIMESTAMP},
+    "stop_time": {"name": "Stoppage Time", "device_class": SensorDeviceClass.TIMESTAMP},
+    "stop_time_minute": {"name": "Stop Time (minutes)", "unit": "min"},
     "device_name_sn": {"name": "Device Name/#"},
     "speed": {"name": "Speed", "unit": UnitOfSpeed.KILOMETERS_PER_HOUR},
     "status": {"name": "Status"},
@@ -58,7 +58,7 @@ class GPSCJSensor(CoordinatorEntity, SensorEntity):
         self._attr_native_unit_of_measurement = sensor_info.get("unit")
         self._attr_device_class = sensor_info.get("device_class")
         self._attr_entity_category = sensor_info.get("entity_category")
-        self._attr_translation_key = sensor_key  # Added translation_key
+        self._attr_translation_key = sensor_key  # Updated translation_key
 
     @property
     def native_value(self):

@@ -92,17 +92,17 @@ class GPSCJTracker(TrackerEntity):
     @property
     def connection_time(self):
         """Return connection time as a datetime object."""
-        return datetime.fromisoformat(self.coordinator.data.get("serverUtcDate"))
+        return datetime.fromisoformat(self.coordinator.data.get("server_utc_date"))
 
     @property
     def location_time(self):
         """Return location time as a datetime object."""
-        return datetime.fromisoformat(self.coordinator.data.get("deviceUtcDate"))
+        return datetime.fromisoformat(self.coordinator.data.get("device_utc_date"))
 
     @property
     def stoppage_time(self):
         """Return stoppage time as a datetime object."""
-        return datetime.fromisoformat(self.coordinator.data.get("stopTime"))
+        return datetime.fromisoformat(self.coordinator.data.get("stop_time"))
 
     async def async_update(self):
         """Manually trigger an update."""

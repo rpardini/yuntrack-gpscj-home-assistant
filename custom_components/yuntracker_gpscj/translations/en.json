@@ -29,19 +29,45 @@
   },
   "entity": {
     "sensor": {
-      "battery": { "name": "Battery Level" },
-      "signal_gps": { "name": "GPS Signal Level" },
-      "signal_4g": { "name": "4G Signal Level" },
-      "serverUtcDate": { "name": "Connection Time" },
-      "deviceUtcDate": { "name": "Location Time" },
-      "stopTime": { "name": "Stoppage Time" },
-      "stopTimeMinute": { "name": "Stop Time (minutes)" },
-      "device_name_sn": { "name": "Device Name/#" },
-      "speed": { "name": "Speed" },
-      "status": { "name": "Status" },
-      "course": { "name": "Course" },
-      "latitude": { "name": "Latitude" },
-      "longitude": { "name": "Longitude" }
+      "battery": {
+        "name": "Battery Level"
+      },
+      "signal_gps": {
+        "name": "GPS Signal Level"
+      },
+      "signal_4g": {
+        "name": "4G Signal Level"
+      },
+      "server_utc_date": {
+        "name": "Connection Time"
+      },
+      "device_utc_date": {
+        "name": "Location Time"
+      },
+      "stop_time": {
+        "name": "Stoppage Time"
+      },
+      "stop_time_minute": {
+        "name": "Stop Time (minutes)"
+      },
+      "device_name_sn": {
+        "name": "Device Name/#"
+      },
+      "speed": {
+        "name": "Speed"
+      },
+      "status": {
+        "name": "Status"
+      },
+      "course": {
+        "name": "Course"
+      },
+      "latitude": {
+        "name": "Latitude"
+      },
+      "longitude": {
+        "name": "Longitude"
+      }
     }
   }
 }
