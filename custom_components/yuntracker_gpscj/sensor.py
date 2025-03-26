@@ -7,7 +7,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN
+from .const import DOMAIN, CONF_DEVICE_ID
 
 SENSOR_TYPES = {
     "battery": {"name": "Battery Level", "unit": PERCENTAGE, "device_class": SensorDeviceClass.BATTERY},
@@ -46,11 +46,11 @@ class GPSCJSensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self._entry = entry
         self._sensor_key = sensor_key
-        self._attr_name = f"{entry.data['device_id']} {sensor_info['name']}"
+        self._attr_name = f"{entry.data[CONF_DEVICE_ID]} {sensor_info['name']}"
         self._attr_unique_id = f"{entry.entry_id}_{sensor_key}"
         self._attr_device_info = {
             "identifiers": {(DOMAIN, entry.entry_id)},
-            "name": f"YunTracker/GPSCJ Device {entry.data['device_id']}",
+            "name": f"YunTracker/GPSCJ {entry.data[CONF_DEVICE_ID]}",
             "manufacturer": "Some chinese manufacturer",
             "model": "Chinese stuff",
             "sw_version": "1.0",

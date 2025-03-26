@@ -94,7 +94,7 @@ class GPSCJTracker(TrackerEntity):
         self.coordinator = coordinator
         self._entry = entry
         self._attr_unique_id = entry.entry_id
-        self._attr_name = f"GPSCJ Tracker {entry.data[CONF_DEVICE_ID]}"
+        self._attr_name = f"YunTracker/GPSCJ {entry.data[CONF_DEVICE_ID]}"
 
     @property
     def latitude(self):
@@ -111,9 +111,9 @@ class GPSCJTracker(TrackerEntity):
         """Return device info to group sensors under the same device."""
         return DeviceInfo(
             identifiers={(DOMAIN, self._entry.entry_id)},
-            name=f"GPSCJ Device {self._entry.data['device_id']}",
-            manufacturer="GPSCJ",
-            model="Tracker",
+            name=f"YunTracker/GPSCJ {self._entry.data[CONF_DEVICE_ID]}",
+            manufacturer="Some chinese manufacturer",
+            model="Chinese stuff",
             sw_version="1.0",
         )
 
