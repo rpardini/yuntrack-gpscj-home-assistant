@@ -111,9 +111,8 @@ def gpscj_create_session_and_login(p_password, p_username):
     _LOGGER.info(f"Login form status code: {login_form_response.status_code}")
     # Check we got a 2xx response.
     login_form_response.raise_for_status()
-    # Parse ASP.NET VIEWSTATE and crap from it using BeautifulSoup.
-    login_form_response_tet = login_form_response.text
-    soup = BeautifulSoup(login_form_response_tet, "html.parser")
+    login_form_response_text = login_form_response.text
+    soup = BeautifulSoup(login_form_response_text, "html.parser")
     VIEWSTATE = soup.find("input", {"name": "__VIEWSTATE"})["value"]
     VIEWSTATEGENERATOR = soup.find("input", {"name": "__VIEWSTATEGENERATOR"})["value"]
     EVENTVALIDATION = soup.find("input", {"name": "__EVENTVALIDATION"})["value"]
