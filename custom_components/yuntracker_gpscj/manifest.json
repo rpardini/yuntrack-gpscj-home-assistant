@@ -1,6 +1,6 @@
 {
   "domain": "yuntracker_gpscj",
-  "name": "YunTracker/GPSCJ Tracker",
+  "name": "YunTracker/GPSCJ",
   "version": "0.0.1",
   "config_flow": true,
   "documentation": "https://github.com/rpardini/yuntracker-gpscj-home-assistant",
@@ -17,5 +17,8 @@
     "translations/pt-BR.json"
   ],
   "iot_class": "cloud_polling",
-  "integration_type": "device"
+  "integration_type": "device",
+  "dependencies": [],
+  "quality_scale": "silver",
+  "is_built_in": false
 }
