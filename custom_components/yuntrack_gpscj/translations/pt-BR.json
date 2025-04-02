@@ -68,6 +68,9 @@
       "course": {
         "name": "Direção"
       },
+      "course_int": {
+        "name": "Direção (Inteiro)"
+      },
       "latitude": {
         "name": "Latitude"
       },

@@ -64,6 +64,7 @@ def gpscj_get_position_from_session(p_device_id, p_user_id, session):
     device['baiduLng'] = float(device['baiduLng'])
     # distance too
     device['distance'] = float(device['distance'])
+    device['course_int'] = int(device['course'])
     # lets parse the 'datacontext' key
     # 'dataContext': '-0---51-18-0-10-0-4'
     # where: 51 is the battery level (51%)

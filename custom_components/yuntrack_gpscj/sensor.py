@@ -28,6 +28,7 @@ SENSOR_TYPES = {
     "speed": {"name": "Speed", "unit": UnitOfSpeed.KILOMETERS_PER_HOUR},
     "status": {"name": "Status"},
     "course": {"name": "Course"},
+    "course_int": {"name": "Course (Integer)"},
     "latitude": {"name": "Latitude", "entity_category": EntityCategory.DIAGNOSTIC},
     "longitude": {"name": "Longitude", "entity_category": EntityCategory.DIAGNOSTIC},
 }

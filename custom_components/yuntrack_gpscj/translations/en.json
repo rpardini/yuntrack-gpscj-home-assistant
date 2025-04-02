@@ -68,6 +68,9 @@
       "course": {
         "name": "Course"
       },
+      "course_int": {
+        "name": "Course (Integer)"
+      },
       "latitude": {
         "name": "Latitude"
       },
