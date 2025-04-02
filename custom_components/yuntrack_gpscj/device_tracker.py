@@ -84,7 +84,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     # Store coordinator before forwarding setup
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
 
+    _LOGGER.debug(f"In device_tracker async_setup_entry, entry.state: {entry.state}")
     if entry.state == ConfigEntryState.SETUP_IN_PROGRESS:
+        _LOGGER.debug(f"ConfigEntryState.SETUP_IN_PROGRESS, running coordinator.async_config_entry_first_refresh()")
         await coordinator.async_config_entry_first_refresh()
 
     device_tracker = GPSCJTracker(coordinator, entry)
@@ -98,6 +100,7 @@ class GPSCJTracker(CoordinatorEntity, TrackerEntity):
     """Representation of a GPSCJ tracked device."""
 
     def __init__(self, coordinator: DataUpdateCoordinator, entry: ConfigEntry):
+        _LOGGER.debug(f"Initializing GPSCJTracker for {entry.data[CONF_USERNAME]}")
         super().__init__(coordinator)
         self.coordinator = coordinator
         self._entry = entry
@@ -107,16 +110,21 @@ class GPSCJTracker(CoordinatorEntity, TrackerEntity):
     @property
     def latitude(self):
         """Return latitude from API data."""
+        _LOGGER.debug(
+            f"Getting latitude for {self._entry.data[CONF_USERNAME]}: {self.coordinator.data.get("latitude")}")
         return self.coordinator.data.get("latitude")
 
     @property
     def longitude(self):
         """Return longitude from API data."""
+        _LOGGER.debug(
+            f"Getting longitude for {self._entry.data[CONF_USERNAME]}: {self.coordinator.data.get("longitude")}")
         return self.coordinator.data.get("longitude")
 
     @property
     def device_info(self):
         """Return device info to group sensors under the same device."""
+        _LOGGER.debug(f"Getting device_info for {self._entry.data[CONF_USERNAME]}")
         return DeviceInfo(
             identifiers={(DOMAIN, self._entry.entry_id)},
             name=f"GPSCJ {self._entry.data[CONF_USERNAME]}",
@@ -128,18 +136,22 @@ class GPSCJTracker(CoordinatorEntity, TrackerEntity):
     @property
     def connection_time(self):
         """Return connection time as a datetime object."""
+        _LOGGER.debug(f"Getting connection_time for {self._entry.data[CONF_USERNAME]}")
         return datetime.datetime.fromisoformat(self.coordinator.data.get("server_utc_date"))
 
     @property
     def location_time(self):
         """Return location time as a datetime object."""
+        _LOGGER.debug(f"Getting location_time for {self._entry.data[CONF_USERNAME]}")
         return datetime.datetime.fromisoformat(self.coordinator.data.get("device_utc_date"))
 
     @property
     def stoppage_time(self):
         """Return stoppage time as a datetime object."""
+        _LOGGER.debug(f"Getting stoppage_time for {self._entry.data[CONF_USERNAME]}")
         return datetime.datetime.fromisoformat(self.coordinator.data.get("stop_time"))
 
     async def async_update(self):
         """Manually trigger an update."""
+        _LOGGER.debug(f"Running async_request_refresh as async_update was called.")
         await self.coordinator.async_request_refresh()

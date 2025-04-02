@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
@@ -8,6 +9,8 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, CONF_USERNAME
+
+_LOGGER = logging.getLogger(__name__)
 
 SENSOR_TYPES = {
     "battery": {"name": "Battery Level", "unit": PERCENTAGE, "device_class": SensorDeviceClass.BATTERY},
@@ -32,6 +35,7 @@ SENSOR_TYPES = {
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
     """Set up sensors based on a config entry."""
+    _LOGGER.debug(f"In sensor, running async_setup_entry")
     coordinator = hass.data[DOMAIN][entry.entry_id]
 
     entities = []
@@ -45,6 +49,7 @@ class GPSCJSensor(CoordinatorEntity, SensorEntity):
     """Representation of additional GPSCJ sensor data."""
 
     def __init__(self, coordinator, entry, sensor_key, sensor_info):
+        _LOGGER.debug(f"Initializing GPSCJSensor for {entry.data[CONF_USERNAME]}: {sensor_key}")
         super().__init__(coordinator)
         self._entry = entry
         self._sensor_key = sensor_key
@@ -65,6 +70,7 @@ class GPSCJSensor(CoordinatorEntity, SensorEntity):
     @property
     def native_value(self):
         """Return the sensor value."""
+        _LOGGER.debug(f"In sensor, Getting value for {self._entry.data[CONF_USERNAME]}: {self._sensor_key}")
         value = self.coordinator.data.get(self._sensor_key)
         if self._sensor_key == "device_name_sn":
             return f"{self.coordinator.data.get('modelName')} {self.coordinator.data.get('model')} {self.coordinator.data.get('sn')}"
