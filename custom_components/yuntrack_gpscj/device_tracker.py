@@ -122,6 +122,15 @@ class GPSCJTracker(CoordinatorEntity, TrackerEntity):
         return self.coordinator.data.get("longitude")
 
     @property
+    def location_accuracy(self) -> int:
+        """Return GPS accuracy in meters."""
+        _LOGGER.debug(
+            f"Getting location_accuracy for {self._entry.data[CONF_USERNAME]}: signal_gps: {self.coordinator.data.get('signal_gps')}")
+        if self.coordinator.data.get("signal_gps") > 9:
+            return 10  # meters
+        return 50  # meters
+
+    @property
     def device_info(self):
         """Return device info to group sensors under the same device."""
         _LOGGER.debug(f"Getting device_info for {self._entry.data[CONF_USERNAME]}")
@@ -132,24 +141,6 @@ class GPSCJTracker(CoordinatorEntity, TrackerEntity):
             model="Chinese stuff",
             sw_version="1.0",
         )
-
-    @property
-    def connection_time(self):
-        """Return connection time as a datetime object."""
-        _LOGGER.debug(f"Getting connection_time for {self._entry.data[CONF_USERNAME]}")
-        return datetime.datetime.fromisoformat(self.coordinator.data.get("server_utc_date"))
-
-    @property
-    def location_time(self):
-        """Return location time as a datetime object."""
-        _LOGGER.debug(f"Getting location_time for {self._entry.data[CONF_USERNAME]}")
-        return datetime.datetime.fromisoformat(self.coordinator.data.get("device_utc_date"))
-
-    @property
-    def stoppage_time(self):
-        """Return stoppage time as a datetime object."""
-        _LOGGER.debug(f"Getting stoppage_time for {self._entry.data[CONF_USERNAME]}")
-        return datetime.datetime.fromisoformat(self.coordinator.data.get("stop_time"))
 
     async def async_update(self):
         """Manually trigger an update."""
