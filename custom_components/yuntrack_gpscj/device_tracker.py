@@ -9,6 +9,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
+    CoordinatorEntity,
 )
 
 from .const import CONF_USER_ID, CONF_DEVICE_ID
@@ -93,10 +94,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     await hass.config_entries.async_forward_entry_setups(entry, [Platform.SENSOR])
 
 
-class GPSCJTracker(TrackerEntity):
+class GPSCJTracker(CoordinatorEntity, TrackerEntity):
     """Representation of a GPSCJ tracked device."""
 
     def __init__(self, coordinator: DataUpdateCoordinator, entry: ConfigEntry):
+        super().__init__(coordinator)
         self.coordinator = coordinator
         self._entry = entry
         self._attr_unique_id = entry.entry_id
