@@ -33,7 +33,7 @@ def gpscj_get_position_from_session(p_device_id, p_user_id, session):
         "x-requested-with": "XMLHttpRequest",
         "Content-Type": "application/json"
     }
-    payload = json.dumps({"UserID": p_user_id, "isFirst": True, "TimeZones": TIMEZONES, "DeviceID": p_device_id})
+    payload = json.dumps({"UserID": p_user_id, "isFirst": False, "TimeZones": TIMEZONES, "DeviceID": p_device_id})
     response = session.post(POSITIONS_URL, data=payload, headers=headers, timeout=REQUEST_TIMEOUT_SECONDS)
     # Check we got a 2xx response.
     response.raise_for_status()
